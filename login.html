@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Вход</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/daisyui@2.51.6/dist/full.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      .image-container {
+        display: none;
+      }
+
+      @media (min-width: 768px) {
+        .image-container {
+          display: block;
+        }
+      }
+    </style>
+  </head>
+  <body class="bg-gray-800 text-white">
+    <div class="flex h-screen">
+      <div
+        id="imageContainer"
+        class="image-container hidden md:block w-1/2 bg-cover bg-center"
+        style="background-image: url('loginbg.jpg')"
+      ></div>
+      <div class="w-full md:w-1/2 flex items-center justify-center">
+        <form class="bg-white p-5 rounded shadow-md w-full max-w-md">
+          <div class="mb-2">
+            <label class="block text-gray-700 font-bold mb-2" for="login">
+              Логин
+            </label>
+            <input
+              class="bg-black/5 shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              id="login"
+              type="login"
+              placeholder="~"
+            />
+          </div>
+          <div class="mb-6">
+            <label class="block text-gray-700 font-bold mb-2" for="password">
+              Пароль
+            </label>
+            <input
+              class="bg-black/5 shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+              id="password"
+              type="password"
+              placeholder="~"
+            />
+          </div>
+          <div class="mt-4">
+            <button
+              class="btn btn-outline btn-accent text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full"
+              type="submit"
+            >
+              Вход
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script>
+      window.addEventListener("load", function () {
+        const imageContainer = document.getElementById("imageContainer");
+        if (window.innerWidth < 768) {
+          imageContainer.style.backgroundImage = "none";
+        } else {
+          imageContainer.style.backgroundImage = "url('loginbg.jpg')";
+        }
+      });
+
+      window.addEventListener("resize", function () {
+        const imageContainer = document.getElementById("imageContainer");
+        if (window.innerWidth < 768) {
+          imageContainer.style.backgroundImage = "none";
+        } else {
+          imageContainer.style.backgroundImage = "url('loginbg.jpg')";
+        }
+      });
+    </script>
+  </body>
+</html>
