@@ -1,6 +1,10 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from .models import Shift, Task
+from django.shortcuts import render
+
+def index(request):
+    return render(request, 'schedule/index.html')
 
 @login_required
 def my_schedule(request):

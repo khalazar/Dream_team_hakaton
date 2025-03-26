@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Patients</title>
+</head>
+<body>
+    <h1>Patients</h1>
+    <p>Выберите раздел:</p>
+    <ul>
+        <li><a href="{% url 'patients:patient_list' %}">Список пациентов</a></li>
+        <li><a href="{% url 'patients:visit_list' %}">Список приёмов</a></li>
+        <li><a href="{% url 'patients:visit_create' %}">Создать приём</a></li>
+    </ul>
+    <p><a href="{% url 'home' %}">Вернуться на главную</a></p>
+</body>
+</html>

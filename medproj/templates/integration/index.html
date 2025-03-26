@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Integration</title>
+</head>
+<body>
+    <h1>Integration</h1>
+    <p>Выберите раздел:</p>
+    <ul>
+        <li><a href="{% url 'integration:fetch_lab_results' 1 %}">Получить результаты лабораторных исследований</a></li>
+    </ul>
+    <p><a href="{% url 'home' %}">Вернуться на главную</a></p>
+</body>
+</html>

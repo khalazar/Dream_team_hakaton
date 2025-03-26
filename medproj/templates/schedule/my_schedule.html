@@ -1,26 +1,32 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="UTF-8">
     <title>Моё расписание</title>
 </head>
 <body>
-<h1>Моё расписание</h1>
+    <h1>Моё расписание</h1>
 
-<h2>Смены</h2>
-<ul>
-{% for shift in shifts %}
-    <li>{{ shift.date }}: {{ shift.start_time }} - {{ shift.end_time }}</li>
-{% endfor %}
-</ul>
+    <h2>Смены</h2>
+    <ul>
+        {% for shift in shifts %}
+            <li>{{ shift.date }}: с {{ shift.start_time }} по {{ shift.end_time }}</li>
+        {% empty %}
+            <li>Смены не назначены.</li>
+        {% endfor %}
+    </ul>
 
-<h2>Задачи</h2>
-<ul>
-{% for task in tasks %}
-    <li>{{ task.title }} ({{ task.date }} {{ task.time }})
-        <a href="{% url 'schedule:task_done' task.id %}">[Выполнить]</a>
-    </li>
-{% endfor %}
-</ul>
-
+    <h2>Задачи</h2>
+    <ul>
+        {% for task in tasks %}
+            <li>
+                {{ task.title }} ({{ task.date }} {{ task.time }})
+                <a href="{% url 'schedule:task_done' task.id %}">[Выполнить]</a>
+            </li>
+        {% empty %}
+            <li>Нет запланированных задач.</li>
+        {% endfor %}
+    </ul>
+    <p><a href="{% url 'home' %}">На главную</a></p>
 </body>
 </html>

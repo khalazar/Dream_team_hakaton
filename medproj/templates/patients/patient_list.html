@@ -1,18 +1,27 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="UTF-8">
     <title>Список пациентов</title>
 </head>
 <body>
-<h1>Список пациентов</h1>
-<form method="get">
-    <input type="text" name="q" placeholder="Поиск по ФИО">
-    <button type="submit">Поиск</button>
-</form>
-<ul>
-{% for patient in patients %}
-    <li>{{ patient.full_name }} ({{ patient.medcard.number }})</li>
-{% endfor %}
-</ul>
+    <h1>Пациенты</h1>
+    <form method="get">
+        <input type="text" name="q" placeholder="Поиск по ФИО">
+        <button type="submit">Поиск</button>
+    </form>
+    <ul>
+        {% for patient in patients %}
+            <li>
+                {{ patient.full_name }}
+                {% if patient.medcard %}
+                    (Медкарта №{{ patient.medcard.number }})
+                {% endif %}
+            </li>
+        {% empty %}
+            <li>Пациенты не найдены.</li>
+        {% endfor %}
+    </ul>
+    <p><a href="{% url 'home' %}">На главную</a></p>
 </body>
 </html>

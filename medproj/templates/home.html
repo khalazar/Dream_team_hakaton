@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="UTF-8">
     <title>Главная страница</title>
 </head>
 <body>
-    <h1>Добро пожаловать в нашу медицинскую систему!</h1>
-    <p>Здесь будет краткая информация о системе, ссылки на основные разделы.</p>
+    <h1>Медицинская система</h1>
+    <p>Выберите приложение:</p>
     <ul>
-        <li><a href="{% url 'accounts:login' %}">Вход</a></li>
-        <li><a href="{% url 'accounts:signup' %}">Регистрация</a></li>
-        <li><a href="{% url 'patients:patient_list' %}">Пациенты</a></li>
-        <li><a href="{% url 'patients:visit_list' %}">Приёмы</a></li>
-        <li><a href="{% url 'schedule:my_schedule' %}">Моё расписание</a></li>
-        <!-- и т.д. -->
+        <li><a href="{% url 'accounts:index' %}">Accounts</a></li>
+        <li><a href="{% url 'patients:index' %}">Patients</a></li>
+        <li><a href="{% url 'schedule:index' %}">Schedule</a></li>
+        <li><a href="{% url 'documents:index' %}">Documents</a></li>
+        <li><a href="{% url 'integration:index' %}">Integration</a></li>
     </ul>
 </body>
 </html>

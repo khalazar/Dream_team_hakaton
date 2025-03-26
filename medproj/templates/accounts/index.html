@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Accounts</title>
+</head>
+<body>
+    <h1>Accounts</h1>
+    <p>Выберите действие:</p>
+    <ul>
+        <li><a href="{% url 'accounts:login' %}">Вход</a></li>
+        <li><a href="{% url 'accounts:signup' %}">Регистрация</a></li>
+        <li><a href="{% url 'accounts:password_change' %}">Смена пароля</a></li>
+        <!-- Другие разделы аккаунтов -->
+    </ul>
+    <p><a href="{% url 'home' %}">Вернуться на главную</a></p>
+</body>
+</html>

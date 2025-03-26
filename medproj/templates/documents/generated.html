@@ -1,10 +1,17 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Документ</title>
+    <meta charset="UTF-8">
+    <title>{{ document.template.title }}</title>
 </head>
 <body>
-<h1>{{ document.template.title }}</h1>
-<p>{{ document.content_filled|safe }}</p>
+    <h1>{{ document.template.title }}</h1>
+    <p>Документ создан: {{ document.created_at }}</p>
+    <hr>
+    <div>
+        {{ document.content_filled|linebreaks }}
+    </div>
+    <hr>
+    <p><a href="{% url 'patients:patient_list' %}">Вернуться к списку пациентов</a></p>
 </body>
 </html>

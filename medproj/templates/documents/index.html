@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Documents</title>
+</head>
+<body>
+    <h1>Documents</h1>
+    <p>Выберите раздел:</p>
+    <ul>
+        <li><a href="{% url 'documents:generate_document' 1 1 %}">Сгенерировать документ</a></li>
+        <!-- Здесь можно добавить другие разделы, если потребуется -->
+    </ul>
+    <p><a href="{% url 'home' %}">Вернуться на главную</a></p>
+</body>
+</html>

@@ -1,6 +1,11 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.db.models import Q
 from .models import Person, Visit
+from django import forms
+from django.shortcuts import render
+
+def index(request):
+    return render(request, 'patients/index.html')
 
 def patient_list(request):
     query = request.GET.get('q')
@@ -32,11 +37,29 @@ def visit_archive(request, visit_id):
     visit.save()
     return redirect('patients:visit_list')
 
+# Определим форму для модели Visit
+class VisitForm(forms.ModelForm):
+    class Meta:
+        model = Visit
+        fields = ['date', 'time', 'doctor', 'patient', 'diagnosis', 'notes']
+
 def visit_create(request):
-    # Здесь можно реализовать логику создания приёма
-    # Либо использовать ModelForm
-    pass
+    if request.method == 'POST':
+        form = VisitForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('patients:visit_list')
+    else:
+        form = VisitForm()
+    return render(request, 'patients/visit_form.html', {'form': form, 'visit': None})
 
 def visit_update(request, visit_id):
-    # Логика обновления
-    pass
+    visit = get_object_or_404(Visit, id=visit_id)
+    if request.method == 'POST':
+        form = VisitForm(request.POST, instance=visit)
+        if form.is_valid():
+            form.save()
+            return redirect('patients:visit_list')
+    else:
+        form = VisitForm(instance=visit)
+    return render(request, 'patients/visit_form.html', {'form': form, 'visit': visit})

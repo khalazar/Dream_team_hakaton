@@ -1,41 +1,61 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="UTF-8">
     <title>Список приёмов</title>
 </head>
 <body>
-<h1>Список приёмов</h1>
-<form method="get">
-    ФИО: <input type="text" name="name">
-    Номер медкарты: <input type="text" name="medcard">
-    Диагноз: <input type="text" name="diag">
-    <button type="submit">Искать</button>
-</form>
-<table border="1">
-    <tr>
-        <th>Пациент</th>
-        <th>Доктор</th>
-        <th>Дата</th>
-        <th>Время</th>
-        <th>Диагноз</th>
-        <th>Архив</th>
-    </tr>
-    {% for visit in visits %}
-    <tr>
-        <td>{{ visit.patient.full_name }}</td>
-        <td>{{ visit.doctor }}</td>
-        <td>{{ visit.date }}</td>
-        <td>{{ visit.time }}</td>
-        <td>{{ visit.diagnosis }}</td>
-        <td>
-            {% if not visit.archived %}
-                <a href="{% url 'patients:visit_archive' visit.id %}">Архивировать</a>
-            {% else %}
-                Архивирован
-            {% endif %}
-        </td>
-    </tr>
-    {% endfor %}
-</table>
+    <h1>Приёмы пациентов</h1>
+    <form method="get">
+        ФИО: <input type="text" name="name" placeholder="ФИО пациента">
+        Номер медкарты: <input type="text" name="medcard" placeholder="Номер медкарты">
+        Диагноз: <input type="text" name="diag" placeholder="Диагноз">
+        <button type="submit">Искать</button>
+    </form>
+    <table border="1" cellpadding="5">
+        <tr>
+            <th>Пациент</th>
+            <th>Доктор</th>
+            <th>Дата</th>
+            <th>Время</th>
+            <th>Диагноз</th>
+            <th>Статус</th>
+            <th>Действие</th>
+        </tr>
+        {% for visit in visits %}
+        <tr>
+            <td>{{ visit.patient.full_name }}</td>
+            <td>{{ visit.doctor.username }}</td>
+            <td>{{ visit.date }}</td>
+            <td>{{ visit.time }}</td>
+            <td>
+              {% if visit.diagnosis %}
+                 {{ visit.diagnosis.name }}
+              {% else %}
+                 -
+              {% endif %}
+            </td>
+            <td>
+                {% if visit.archived %}
+                    Архивирован
+                {% else %}
+                    Активный
+                {% endif %}
+            </td>
+            <td>
+                {% if not visit.archived %}
+                    <a href="{% url 'patients:visit_archive' visit.id %}">Архивировать</a>
+                {% endif %}
+                <a href="{% url 'patients:visit_update' visit.id %}">Редактировать</a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="7">Приёмов не найдено.</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <p><a href="{% url 'patients:visit_create' %}">Создать новый приём</a></p>
+    <p><a href="{% url 'home' %}">На главную</a></p>
 </body>
 </html>

@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>{% if visit %}Редактировать приём{% else %}Создать приём{% endif %}</title>
+</head>
+<body>
+    <h1>{% if visit %}Редактировать приём{% else %}Создать новый приём{% endif %}</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">
+            {% if visit %}Сохранить изменения{% else %}Создать приём{% endif %}
+        </button>
+    </form>
+    <p><a href="{% url 'patients:visit_list' %}">Вернуться к списку приёмов</a></p>
+</body>
+</html>

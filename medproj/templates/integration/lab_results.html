@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Результаты лабораторных исследований</title>
+</head>
+<body>
+    <h1>Лабораторные исследования для пациента: {{ patient.full_name }}</h1>
+    <ul>
+        {% for result in lab_results %}
+            <li>
+                Дата: {{ result.created_at }} <br>
+                Результаты: {{ result.result_data }}
+            </li>
+        {% empty %}
+            <li>Результаты отсутствуют.</li>
+        {% endfor %}
+    </ul>
+    <p><a href="{% url 'patients:patient_list' %}">Вернуться к списку пациентов</a></p>
+</body>
+</html>
