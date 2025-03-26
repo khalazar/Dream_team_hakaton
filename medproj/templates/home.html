@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Главная страница</title>
+</head>
+<body>
+    <h1>Добро пожаловать в нашу медицинскую систему!</h1>
+    <p>Здесь будет краткая информация о системе, ссылки на основные разделы.</p>
+    <ul>
+        <li><a href="{% url 'accounts:login' %}">Вход</a></li>
+        <li><a href="{% url 'accounts:signup' %}">Регистрация</a></li>
+        <li><a href="{% url 'patients:patient_list' %}">Пациенты</a></li>
+        <li><a href="{% url 'patients:visit_list' %}">Приёмы</a></li>
+        <li><a href="{% url 'schedule:my_schedule' %}">Моё расписание</a></li>
+        <!-- и т.д. -->
+    </ul>
+</body>
+</html>

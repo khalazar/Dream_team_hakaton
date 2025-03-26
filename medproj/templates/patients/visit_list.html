@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Список приёмов</title>
+</head>
+<body>
+<h1>Список приёмов</h1>
+<form method="get">
+    ФИО: <input type="text" name="name">
+    Номер медкарты: <input type="text" name="medcard">
+    Диагноз: <input type="text" name="diag">
+    <button type="submit">Искать</button>
+</form>
+<table border="1">
+    <tr>
+        <th>Пациент</th>
+        <th>Доктор</th>
+        <th>Дата</th>
+        <th>Время</th>
+        <th>Диагноз</th>
+        <th>Архив</th>
+    </tr>
+    {% for visit in visits %}
+    <tr>
+        <td>{{ visit.patient.full_name }}</td>
+        <td>{{ visit.doctor }}</td>
+        <td>{{ visit.date }}</td>
+        <td>{{ visit.time }}</td>
+        <td>{{ visit.diagnosis }}</td>
+        <td>
+            {% if not visit.archived %}
+                <a href="{% url 'patients:visit_archive' visit.id %}">Архивировать</a>
+            {% else %}
+                Архивирован
+            {% endif %}
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+</body>
+</html>

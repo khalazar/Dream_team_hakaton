@@ -1,0 +1,30 @@
+# Операционные системы
+.DS_Store
+Thumbs.db
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg
+*.egg-info
+dist/
+build/
+*.log
+
+# Virtualenv
+venv/
+ENV/
+env/
+.venv/
+
+# Django
+db.sqlite3
+media/
+staticfiles/
+
+# Разное
+*.swp
+*.swo
+
+# Секретные и приватные файлы
+.env
