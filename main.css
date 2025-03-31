@@ -1,0 +1,67 @@
+/* Основной фон */
+body {
+  background-color: #e2e8f0; /* Светло-серый фон как запасной вариант */
+}
+
+/* Фон для основного контента с размытым изображением */
+main {
+  background: linear-gradient(
+      135deg,
+      rgba(214, 224, 239, 0.8) 0%,
+      rgba(235, 241, 249, 0.6) 100%
+    ),
+    url("https://images.unsplash.com/photo-1576091160550-2173dba999ef?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80")
+      no-repeat center center fixed;
+  background-size: cover;
+}
+
+/* --- Стилизация меню --- */
+
+/* Активная вкладка в боковом меню (Desktop) */
+.sidebar-nav a.active {
+  background-color: theme(
+    "colors.primary"
+  ); /* Используем цвет из темы DaisyUI */
+  color: theme("colors.primary-content");
+}
+
+/* Активная вкладка в нижнем мобильном меню */
+.mobile-bottom-nav a.active {
+  color: theme("colors.primary");
+  border-top-color: theme("colors.primary"); /* Граница сверху для индикации */
+}
+
+/* --- Управление вкладками --- */
+.tab-content {
+  display: none; /* Скрываем все вкладки по умолчанию */
+}
+.tab-content.active {
+  display: block; /* Показываем активную вкладку */
+}
+
+/* --- Стили календаря (если используется месячный вид) --- */
+.calendar-day.selected {
+  background-color: theme("colors.primary");
+  color: theme("colors.primary-content");
+  font-weight: bold;
+}
+.calendar-day.marked {
+  background-color: theme(
+    "colors.primary / 20%"
+  ); /* Полупрозрачный основной цвет */
+}
+
+/* --- Стили списка расписания --- */
+/* Убираем отступ и границу у последнего элемента в списке расписания */
+.schedule-list > div:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+/* --- Дополнительные стили (если понадобятся) --- */
+
+/* Стилизация иконок прочитано/непрочитано в чате (цвета уже заданы inline через text-blue-500/text-gray-500, но можно вынести сюда) */
+/*
+.read-check-double { color: theme('colors.blue.500'); }
+.read-check-single { color: theme('colors.gray.500'); }
+*/
