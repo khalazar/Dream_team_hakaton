@@ -1,0 +1,1125 @@
+<!DOCTYPE html>
+<html lang="ru" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>АРМ Дежурного Врача</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/daisyui@4.10.1/dist/full.min.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/lucide-static@latest/font/Lucide.css"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      /* Custom styles */
+      body {
+        font-family: "Inter", sans-serif;
+        background-color: #f5f5f5; /* Base background */
+      }
+      /* Custom colors from the palette */
+      .bg-base-100 {
+        background-color: #f5f5f5;
+      } /* Lightest Gray */
+      .bg-base-200 {
+        background-color: #e5e9ec;
+      } /* Lighter Gray */
+      .bg-base-300 {
+        background-color: #d9d9d9;
+      } /* Gray */
+      .text-base-content {
+        color: #4b535a;
+      } /* Dark Gray */
+      .text-muted {
+        color: #768087;
+      } /* Medium Gray */
+      .border-base-300 {
+        border-color: #d9d9d9;
+      }
+      .btn-primary {
+        background-color: #e8a850; /* Primary Yellow */
+        border-color: #e8a850;
+        color: #4b535a; /* Dark text for contrast */
+      }
+      .btn-primary:hover {
+        background-color: #e6c495; /* Lighter Yellow */
+        border-color: #e6c495;
+      }
+      .menu .menu-item > a.active,
+      .menu .menu-item > button.active {
+        background-color: #e5e9ec; /* Lighter Gray for active menu */
+        color: #4b535a;
+      }
+      .menu .menu-item > a:hover,
+      .menu .menu-item > button:hover {
+        background-color: #e5e9ec;
+      }
+      .calendar-day.selected {
+        background-color: #e8a850 !important;
+        color: white !important;
+        border-radius: 50%;
+      }
+      .calendar-day:hover {
+        background-color: #e5e9ec;
+        border-radius: 50%;
+      }
+      .lucide {
+        /* Style for icons */
+        width: 1.25em;
+        height: 1.25em;
+        stroke-width: 2;
+        vertical-align: middle;
+        margin-right: 0.5rem; /* Add space between icon and text */
+      }
+      /* Mobile bottom navigation */
+      .mobile-nav {
+        display: none; /* Hidden by default */
+      }
+      @media (max-width: 768px) {
+        .sidebar {
+          display: none; /* Hide sidebar on mobile */
+        }
+        .mobile-nav {
+          display: flex; /* Show bottom nav on mobile */
+          position: fixed;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          background-color: #f5f5f5; /* Base background */
+          border-top: 1px solid #d9d9d9; /* Gray border */
+          z-index: 50;
+          justify-content: space-around;
+          padding: 0.5rem 0;
+        }
+        .mobile-nav button {
+          color: #768087; /* Medium Gray */
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          font-size: 0.75rem;
+          padding: 0.25rem 0.5rem;
+          border-radius: 0.375rem; /* rounded-md */
+        }
+        .mobile-nav button.active {
+          color: #e8a850; /* Primary Yellow */
+          background-color: transparent; /* Remove background */
+        }
+        .mobile-nav .lucide {
+          margin-right: 0; /* Remove margin for icons in mobile nav */
+          margin-bottom: 0.25rem;
+          width: 1.5em; /* Slightly larger icons */
+          height: 1.5em;
+        }
+        main {
+          margin-left: 0; /* Remove left margin for main content on mobile */
+          padding-bottom: 60px; /* Add padding to avoid overlap with bottom nav */
+        }
+      }
+    </style>
+  </head>
+  <body
+    class="flex flex-col md:flex-row min-h-screen bg-base-100 text-base-content"
+  >
+    <aside
+      class="sidebar w-64 bg-base-100 text-base-content p-4 space-y-6 border-r border-base-300 hidden md:flex md:flex-col"
+    >
+      <div class="flex items-center space-x-3 p-2 rounded-lg">
+        <div class="avatar">
+          <div
+            class="w-12 rounded-full ring ring-offset-base-100 ring-offset-2"
+            style="border-color: #e8a850"
+          >
+            <img
+              src="https://placehold.co/100x100/E6C495/4B535A?text=Dr"
+              alt="Аватар врача"
+              onerror="this.onerror=null; this.src='https://placehold.co/100x100/E5E9EC/768087?text=Error';"
+            />
+          </div>
+        </div>
+        <div>
+          <div class="font-bold">Иванов И.И.</div>
+          <div class="text-sm text-muted">Дежурный врач</div>
+        </div>
+      </div>
+
+      <ul class="menu space-y-2 flex-grow" id="desktop-menu">
+        <li>
+          <button
+            onclick="showSection('schedule')"
+            class="active text-base-content hover:bg-base-200 rounded-lg"
+          >
+            <i class="lucide lucide-calendar-days"></i> Расписание
+          </button>
+        </li>
+        <li>
+          <button
+            onclick="showSection('patients')"
+            class="text-base-content hover:bg-base-200 rounded-lg"
+          >
+            <i class="lucide lucide-users"></i> Пациенты
+          </button>
+        </li>
+        <li>
+          <button
+            onclick="showSection('integration')"
+            class="text-base-content hover:bg-base-200 rounded-lg"
+          >
+            <i class="lucide lucide-flask-conical"></i> Интеграция
+          </button>
+        </li>
+        <li>
+          <button
+            onclick="showSection('documents')"
+            class="text-base-content hover:bg-base-200 rounded-lg"
+          >
+            <i class="lucide lucide-file-text"></i> Документы
+          </button>
+        </li>
+        <li>
+          <button
+            onclick="showSection('chat')"
+            class="text-base-content hover:bg-base-200 rounded-lg"
+          >
+            <i class="lucide lucide-message-square"></i> Чат
+          </button>
+        </li>
+      </ul>
+      <div class="mt-auto">
+        <button
+          class="btn btn-block bg-gray-200 hover:bg-gray-300 border-none text-gray-700"
+        >
+          <i class="lucide lucide-log-out"></i> Выйти
+        </button>
+      </div>
+    </aside>
+
+    <main class="flex-1 p-4 md:p-8 overflow-y-auto">
+      <section id="schedule" class="space-y-6">
+        <h1 class="text-3xl font-bold text-gray-700">Расписание и Задачи</h1>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div class="lg:col-span-2 card bg-base-200 shadow-md rounded-lg">
+            <div class="card-body">
+              <div class="flex justify-between items-center mb-4">
+                <h2 class="card-title text-gray-700">
+                  Календарь (Август 2025)
+                </h2>
+                <div>
+                  <button
+                    class="btn btn-sm btn-ghost"
+                    aria-label="Предыдущий месяц"
+                  >
+                    <i class="lucide lucide-chevron-left"></i>
+                  </button>
+                  <button
+                    class="btn btn-sm btn-ghost"
+                    aria-label="Следующий месяц"
+                  >
+                    <i class="lucide lucide-chevron-right"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="grid grid-cols-7 gap-1 text-center text-sm">
+                <div class="font-semibold text-muted">Вс</div>
+                <div class="font-semibold text-muted">Пн</div>
+                <div class="font-semibold text-muted">Вт</div>
+                <div class="font-semibold text-muted">Ср</div>
+                <div class="font-semibold text-muted">Чт</div>
+                <div class="font-semibold text-muted">Пт</div>
+                <div class="font-semibold text-muted">Сб</div>
+
+                <div class="text-muted">27</div>
+                <div class="text-muted">28</div>
+                <div class="text-muted">29</div>
+                <div class="text-muted">30</div>
+                <div class="text-muted">31</div>
+                <div class="p-2 rounded-full cursor-pointer calendar-day">
+                  1
+                </div>
+                <div class="p-2 rounded-full cursor-pointer calendar-day">
+                  2
+                </div>
+                <div class="p-2 rounded-full cursor-pointer calendar-day">
+                  3
+                </div>
+                <div class="p-2 rounded-full cursor-pointer calendar-day">
+                  4
+                </div>
+                <div class="p-2 rounded-full cursor-pointer calendar-day">
+                  5
+                </div>
+                <div class="p-2 rounded-full cursor-pointer calendar-day">
+                  6
+                </div>
+                <div class="p-2 rounded-full cursor-pointer calendar-day">
+                  7
+                </div>
+                <div class="p-2 rounded-full cursor-pointer calendar-day">
+                  8
+                </div>
+                <div class="p-2 rounded-full cursor-pointer calendar-day">
+                  9
+                </div>
+                <div class="p-2 rounded-full cursor-pointer calendar-day">
+                  10
+                </div>
+                <div class="p-2 rounded-full cursor-pointer calendar-day">
+                  11
+                </div>
+                <div class="p-2 rounded-full cursor-pointer calendar-day">
+                  12
+                </div>
+                <div class="p-2 rounded-full cursor-pointer calendar-day">
+                  13
+                </div>
+                <div class="p-2 rounded-full cursor-pointer calendar-day">
+                  14
+                </div>
+                <div class="p-2 rounded-full cursor-pointer calendar-day">
+                  15
+                </div>
+                <div class="p-2 rounded-full cursor-pointer calendar-day">
+                  16
+                </div>
+                <div
+                  class="p-2 rounded-full cursor-pointer calendar-day selected"
+                >
+                  17
+                </div>
+                <div class="p-2 rounded-full cursor-pointer calendar-day">
+                  18
+                </div>
+                <div class="p-2 rounded-full cursor-pointer calendar-day">
+                  19
+                </div>
+                <div class="p-2 rounded-full cursor-pointer calendar-day">
+                  20
+                </div>
+                <div class="p-2 rounded-full cursor-pointer calendar-day">
+                  21
+                </div>
+                <div class="p-2 rounded-full cursor-pointer calendar-day">
+                  22
+                </div>
+                <div class="p-2 rounded-full cursor-pointer calendar-day">
+                  23
+                </div>
+                <div class="p-2 rounded-full cursor-pointer calendar-day">
+                  24
+                </div>
+                <div class="p-2 rounded-full cursor-pointer calendar-day">
+                  25
+                </div>
+                <div class="p-2 rounded-full cursor-pointer calendar-day">
+                  26
+                </div>
+                <div class="p-2 rounded-full cursor-pointer calendar-day">
+                  27
+                </div>
+                <div class="p-2 rounded-full cursor-pointer calendar-day">
+                  28
+                </div>
+                <div class="p-2 rounded-full cursor-pointer calendar-day">
+                  29
+                </div>
+                <div class="p-2 rounded-full cursor-pointer calendar-day">
+                  30
+                </div>
+                <div class="p-2 rounded-full cursor-pointer calendar-day">
+                  31
+                </div>
+                <div class="text-muted">1</div>
+                <div class="text-muted">2</div>
+                <div class="text-muted">3</div>
+                <div class="text-muted">4</div>
+                <div class="text-muted">5</div>
+                <div class="text-muted">6</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="lg:col-span-1 space-y-4">
+            <div class="card bg-base-200 shadow-md rounded-lg">
+              <div class="card-body">
+                <h2 class="card-title text-gray-700">Мои Смены</h2>
+                <ul
+                  class="list-disc list-inside space-y-1 text-sm text-gray-600"
+                >
+                  <li>2025-08-17: с 08:00 по 20:00</li>
+                  <li>2025-08-19: с 20:00 по 08:00</li>
+                </ul>
+              </div>
+            </div>
+            <div class="card bg-base-200 shadow-md rounded-lg">
+              <div class="card-body">
+                <h2 class="card-title text-gray-700">
+                  Задачи на сегодня (17 Авг)
+                </h2>
+                <ul class="space-y-2 text-sm">
+                  <li
+                    class="flex justify-between items-center p-2 bg-base-100 rounded-md"
+                  >
+                    <span>Обход пациентов (2025-08-17 09:00)</span>
+                    <button
+                      class="btn btn-xs btn-outline border-yellow-500 text-yellow-600 hover:bg-yellow-500 hover:text-white hover:border-yellow-500"
+                    >
+                      Выполнить
+                    </button>
+                  </li>
+                  <li
+                    class="flex justify-between items-center p-2 bg-base-100 rounded-md"
+                  >
+                    <span>Заполнить карту Иванова П.С. (2025-08-17 11:30)</span>
+                    <button
+                      class="btn btn-xs btn-outline border-yellow-500 text-yellow-600 hover:bg-yellow-500 hover:text-white hover:border-yellow-500"
+                    >
+                      Выполнить
+                    </button>
+                  </li>
+                </ul>
+                <div class="card-actions justify-end mt-2">
+                  <button class="btn btn-sm btn-primary">
+                    Добавить задачу
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="patients" class="hidden space-y-6">
+        <h1 class="text-3xl font-bold text-gray-700">Пациенты</h1>
+
+        <div class="flex flex-wrap gap-2 mb-4">
+          <button
+            class="btn btn-sm btn-primary"
+            onclick="showPatientSubSection('patient-list')"
+          >
+            <i class="lucide lucide-list"></i> Список пациентов
+          </button>
+          <button
+            class="btn btn-sm btn-outline border-gray-300 text-gray-600"
+            onclick="showPatientSubSection('visit-list')"
+          >
+            <i class="lucide lucide-clipboard-list"></i> Список приёмов
+          </button>
+          <button
+            class="btn btn-sm btn-outline border-gray-300 text-gray-600"
+            onclick="showPatientSubSection('visit-create')"
+          >
+            <i class="lucide lucide-plus-circle"></i> Создать приём
+          </button>
+        </div>
+
+        <div id="patient-list" class="patient-subsection space-y-4">
+          <h2 class="text-xl font-semibold text-gray-700">Список пациентов</h2>
+          <form class="flex gap-2">
+            <input
+              type="text"
+              name="q_patient"
+              placeholder="Поиск по ФИО..."
+              class="input input-bordered input-sm w-full max-w-xs bg-base-200 border-base-300 rounded-md"
+            />
+            <button type="submit" class="btn btn-sm btn-primary">Поиск</button>
+          </form>
+          <div class="overflow-x-auto rounded-lg shadow-md bg-base-200">
+            <table class="table table-zebra table-sm w-full">
+              <thead>
+                <tr class="bg-gray-300 text-gray-700">
+                  <th>ФИО</th>
+                  <th>Номер медкарты</th>
+                  <th>Действия</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Петров Василий Степанович</td>
+                  <td>12345</td>
+                  <td>
+                    <button class="btn btn-xs btn-ghost text-blue-600">
+                      Подробнее
+                    </button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Сидорова Анна Михайловна</td>
+                  <td>67890</td>
+                  <td>
+                    <button class="btn btn-xs btn-ghost text-blue-600">
+                      Подробнее
+                    </button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Иванов Пётр Сергеевич</td>
+                  <td>11223</td>
+                  <td>
+                    <button class="btn btn-xs btn-ghost text-blue-600">
+                      Подробнее
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div id="visit-list" class="patient-subsection hidden space-y-4">
+          <h2 class="text-xl font-semibold text-gray-700">Список приёмов</h2>
+          <form class="grid grid-cols-1 md:grid-cols-4 gap-2 items-end">
+            <div class="form-control">
+              <label class="label pb-1"
+                ><span class="label-text text-sm text-gray-600"
+                  >ФИО пациента</span
+                ></label
+              >
+              <input
+                type="text"
+                name="name"
+                placeholder="ФИО..."
+                class="input input-bordered input-sm bg-base-200 border-base-300 rounded-md"
+              />
+            </div>
+            <div class="form-control">
+              <label class="label pb-1"
+                ><span class="label-text text-sm text-gray-600"
+                  >Номер медкарты</span
+                ></label
+              >
+              <input
+                type="text"
+                name="medcard"
+                placeholder="Номер..."
+                class="input input-bordered input-sm bg-base-200 border-base-300 rounded-md"
+              />
+            </div>
+            <div class="form-control">
+              <label class="label pb-1"
+                ><span class="label-text text-sm text-gray-600"
+                  >Диагноз</span
+                ></label
+              >
+              <input
+                type="text"
+                name="diag"
+                placeholder="Диагноз..."
+                class="input input-bordered input-sm bg-base-200 border-base-300 rounded-md"
+              />
+            </div>
+            <button type="submit" class="btn btn-sm btn-primary self-end">
+              Искать
+            </button>
+          </form>
+          <div class="overflow-x-auto rounded-lg shadow-md bg-base-200">
+            <table class="table table-zebra table-sm w-full">
+              <thead>
+                <tr class="bg-gray-300 text-gray-700">
+                  <th>Пациент</th>
+                  <th>Доктор</th>
+                  <th>Дата</th>
+                  <th>Время</th>
+                  <th>Диагноз</th>
+                  <th>Статус</th>
+                  <th>Действия</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Петров В.С.</td>
+                  <td>Иванов И.И.</td>
+                  <td>2025-08-16</td>
+                  <td>10:30</td>
+                  <td>ОРВИ</td>
+                  <td>
+                    <span class="badge badge-success badge-sm text-white"
+                      >Активный</span
+                    >
+                  </td>
+                  <td class="space-x-1">
+                    <button class="btn btn-xs btn-ghost text-blue-600">
+                      Ред.
+                    </button>
+                    <button class="btn btn-xs btn-ghost text-orange-600">
+                      Архив.
+                    </button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Сидорова А.М.</td>
+                  <td>Иванов И.И.</td>
+                  <td>2025-08-15</td>
+                  <td>14:00</td>
+                  <td>Гастрит</td>
+                  <td>
+                    <span class="badge badge-warning badge-sm text-gray-700"
+                      >Архивирован</span
+                    >
+                  </td>
+                  <td class="space-x-1">
+                    <button class="btn btn-xs btn-ghost text-blue-600">
+                      Ред.
+                    </button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Иванов П.С.</td>
+                  <td>Смирнов А.В.</td>
+                  <td>2025-08-17</td>
+                  <td>09:15</td>
+                  <td>-</td>
+                  <td>
+                    <span class="badge badge-success badge-sm text-white"
+                      >Активный</span
+                    >
+                  </td>
+                  <td class="space-x-1">
+                    <button class="btn btn-xs btn-ghost text-blue-600">
+                      Ред.
+                    </button>
+                    <button class="btn btn-xs btn-ghost text-orange-600">
+                      Архив.
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div id="visit-create" class="patient-subsection hidden space-y-4">
+          <h2 class="text-xl font-semibold text-gray-700">
+            Создать новый приём
+          </h2>
+          <form class="card bg-base-200 shadow-md rounded-lg p-4 space-y-3">
+            <div class="form-control">
+              <label class="label pb-1"
+                ><span class="label-text text-sm text-gray-600"
+                  >Пациент</span
+                ></label
+              >
+              <select
+                class="select select-bordered select-sm bg-base-100 border-base-300 rounded-md"
+              >
+                <option disabled selected>Выберите пациента</option>
+                <option>Петров Василий Степанович (12345)</option>
+                <option>Сидорова Анна Михайловна (67890)</option>
+                <option>Иванов Пётр Сергеевич (11223)</option>
+              </select>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div class="form-control">
+                <label class="label pb-1"
+                  ><span class="label-text text-sm text-gray-600"
+                    >Дата приёма</span
+                  ></label
+                >
+                <input
+                  type="date"
+                  class="input input-bordered input-sm bg-base-100 border-base-300 rounded-md"
+                  value="2025-08-17"
+                />
+              </div>
+              <div class="form-control">
+                <label class="label pb-1"
+                  ><span class="label-text text-sm text-gray-600"
+                    >Время приёма</span
+                  ></label
+                >
+                <input
+                  type="time"
+                  class="input input-bordered input-sm bg-base-100 border-base-300 rounded-md"
+                  value="10:00"
+                />
+              </div>
+            </div>
+            <div class="form-control">
+              <label class="label pb-1"
+                ><span class="label-text text-sm text-gray-600"
+                  >Диагноз (необязательно)</span
+                ></label
+              >
+              <input
+                type="text"
+                placeholder="Введите диагноз"
+                class="input input-bordered input-sm bg-base-100 border-base-300 rounded-md"
+              />
+            </div>
+            <div class="form-control">
+              <label class="label pb-1"
+                ><span class="label-text text-sm text-gray-600"
+                  >Примечания</span
+                ></label
+              >
+              <textarea
+                class="textarea textarea-bordered textarea-sm bg-base-100 border-base-300 rounded-md"
+                placeholder="Дополнительная информация..."
+              ></textarea>
+            </div>
+            <div class="card-actions justify-end">
+              <button type="submit" class="btn btn-sm btn-primary">
+                Создать приём
+              </button>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <section id="integration" class="hidden space-y-6">
+        <h1 class="text-3xl font-bold text-gray-700">Интеграция</h1>
+
+        <div class="card bg-base-200 shadow-md rounded-lg">
+          <div class="card-body">
+            <h2 class="card-title text-gray-700">Лабораторные исследования</h2>
+            <p class="text-sm text-muted">
+              Получение результатов из внешних систем.
+            </p>
+
+            <div class="form-control w-full max-w-xs">
+              <label class="label pb-1"
+                ><span class="label-text text-sm text-gray-600"
+                  >Выберите пациента</span
+                ></label
+              >
+              <select
+                class="select select-bordered select-sm bg-base-100 border-base-300 rounded-md"
+              >
+                <option disabled selected>Выберите...</option>
+                <option value="1">Петров Василий Степанович (12345)</option>
+                <option value="2">Сидорова Анна Михайловна (67890)</option>
+                <option value="3">Иванов Пётр Сергеевич (11223)</option>
+              </select>
+            </div>
+
+            <div class="card-actions justify-start mt-4">
+              <button
+                class="btn btn-sm btn-primary"
+                onclick="fetchLabResults(1)"
+              >
+                <i class="lucide lucide-download"></i> Получить результаты
+              </button>
+            </div>
+
+            <div id="lab-results-area" class="mt-4 space-y-2 hidden">
+              <h3 class="font-semibold text-gray-700">
+                Результаты для: <span id="lab-patient-name"></span>
+              </h3>
+              <ul
+                class="list-disc list-inside text-sm text-gray-600 bg-base-100 p-3 rounded-md"
+              >
+                <li>
+                  Дата: 2025-08-15 10:00:00 <br />
+                  Результаты: Общий анализ крови - норма
+                </li>
+                <li>
+                  Дата: 2025-08-10 11:30:00 <br />
+                  Результаты: Биохимия - незначительные отклонения
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="documents" class="hidden space-y-6">
+        <h1 class="text-3xl font-bold text-gray-700">Документы</h1>
+
+        <div class="card bg-base-200 shadow-md rounded-lg">
+          <div class="card-body">
+            <h2 class="card-title text-gray-700">Генерация документов</h2>
+            <p class="text-sm text-muted">Создание документов по шаблонам.</p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="form-control w-full">
+                <label class="label pb-1"
+                  ><span class="label-text text-sm text-gray-600"
+                    >Выберите пациента</span
+                  ></label
+                >
+                <select
+                  class="select select-bordered select-sm bg-base-100 border-base-300 rounded-md"
+                >
+                  <option disabled selected>Выберите...</option>
+                  <option value="1">Петров Василий Степанович (12345)</option>
+                  <option value="2">Сидорова Анна Михайловна (67890)</option>
+                  <option value="3">Иванов Пётр Сергеевич (11223)</option>
+                </select>
+              </div>
+              <div class="form-control w-full">
+                <label class="label pb-1"
+                  ><span class="label-text text-sm text-gray-600"
+                    >Выберите шаблон</span
+                  ></label
+                >
+                <select
+                  class="select select-bordered select-sm bg-base-100 border-base-300 rounded-md"
+                >
+                  <option disabled selected>Выберите...</option>
+                  <option value="1">Направление на анализ</option>
+                  <option value="2">Выписка из истории болезни</option>
+                  <option value="3">Рецепт</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="card-actions justify-start mt-4">
+              <button
+                class="btn btn-sm btn-primary"
+                onclick="generateDocument(1, 1)"
+              >
+                <i class="lucide lucide-file-plus-2"></i> Сгенерировать документ
+              </button>
+            </div>
+
+            <div
+              id="generated-document-area"
+              class="mt-4 p-4 border border-base-300 rounded-md bg-base-100 hidden"
+            >
+              <h3 class="font-semibold text-gray-700" id="document-title">
+                Название Документа
+              </h3>
+              <p class="text-xs text-muted mb-2">
+                Документ создан: <span id="document-timestamp"></span>
+              </p>
+              <hr class="border-base-300 my-2" />
+              <div
+                class="prose prose-sm max-w-none text-gray-700"
+                id="document-content"
+              >
+                <p>Содержимое сгенерированного документа будет здесь...</p>
+                <p>Пациент: [ФИО Пациента]</p>
+                <p>Дата: [Дата]</p>
+                <p>Назначение: [Текст назначения]</p>
+              </div>
+              <hr class="border-base-300 mt-2" />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="chat" class="hidden h-full flex flex-col">
+        <h1 class="text-3xl font-bold text-gray-700 mb-4">Чат</h1>
+        <div
+          class="flex-grow card bg-base-200 shadow-md rounded-lg overflow-hidden flex flex-col"
+        >
+          <div class="flex-grow p-4 space-y-4 overflow-y-auto">
+            <div class="chat chat-start">
+              <div class="chat-image avatar">
+                <div class="w-10 rounded-full">
+                  <img
+                    alt="Аватар Смирнов А.В."
+                    src="https://placehold.co/40x40/A9B4BB/FFFFFF?text=SA"
+                  />
+                </div>
+              </div>
+              <div class="chat-header text-xs text-muted opacity-50">
+                Смирнов А.В.
+                <time class="text-xs opacity-50 ml-1">12:45</time>
+              </div>
+              <div class="chat-bubble bg-gray-300 text-gray-700">
+                Нужно посмотреть пациента Петрова в палате 5.
+              </div>
+            </div>
+            <div class="chat chat-end">
+              <div class="chat-image avatar">
+                <div class="w-10 rounded-full">
+                  <img
+                    alt="Аватар Иванов И.И."
+                    src="https://placehold.co/40x40/E6C495/4B535A?text=II"
+                  />
+                </div>
+              </div>
+              <div class="chat-header text-xs text-muted opacity-50">
+                Вы
+                <time class="text-xs opacity-50 ml-1">12:46</time>
+              </div>
+              <div
+                class="chat-bubble chat-bubble-primary bg-yellow-500 text-gray-700"
+              >
+                Хорошо, иду.
+              </div>
+            </div>
+            <div class="chat chat-start">
+              <div class="chat-image avatar">
+                <div class="w-10 rounded-full">
+                  <img
+                    alt="Аватар Кузнецова О.П."
+                    src="https://placehold.co/40x40/D9D9D9/4B535A?text=KO"
+                  />
+                </div>
+              </div>
+              <div class="chat-header text-xs text-muted opacity-50">
+                Кузнецова О.П. (Медсестра)
+                <time class="text-xs opacity-50 ml-1">13:02</time>
+              </div>
+              <div class="chat-bubble bg-gray-300 text-gray-700">
+                Принесли анализы Сидоровой А.М.
+              </div>
+            </div>
+            <div class="chat chat-end">
+              <div class="chat-image avatar">
+                <div class="w-10 rounded-full">
+                  <img
+                    alt="Аватар Иванов И.И."
+                    src="https://placehold.co/40x40/E6C495/4B535A?text=II"
+                  />
+                </div>
+              </div>
+              <div class="chat-header text-xs text-muted opacity-50">
+                Вы
+                <time class="text-xs opacity-50 ml-1">13:05</time>
+              </div>
+              <div
+                class="chat-bubble chat-bubble-primary bg-yellow-500 text-gray-700"
+              >
+                Спасибо, посмотрю позже.
+              </div>
+            </div>
+          </div>
+          <div class="p-4 bg-base-100 border-t border-base-300">
+            <div class="flex items-center gap-2">
+              <input
+                type="text"
+                placeholder="Введите сообщение..."
+                class="input input-bordered input-sm w-full bg-base-200 border-base-300 rounded-md"
+              />
+              <button class="btn btn-sm btn-primary">
+                <i class="lucide lucide-send"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <nav class="mobile-nav" id="mobile-menu">
+      <button onclick="showSection('schedule')" class="active">
+        <i class="lucide lucide-calendar-days"></i> Расписание
+      </button>
+      <button onclick="showSection('patients')">
+        <i class="lucide lucide-users"></i> Пациенты
+      </button>
+      <button onclick="showSection('chat')">
+        <i class="lucide lucide-message-square"></i> Чат
+      </button>
+      <button onclick="showSection('documents')">
+        <i class="lucide lucide-file-text"></i> Документы
+      </button>
+      <button onclick="showSection('integration')">
+        <i class="lucide lucide-flask-conical"></i> Интеграция
+      </button>
+    </nav>
+
+    <script>
+      // Get references to sections and menu items
+      const sections = document.querySelectorAll("main > section");
+      const desktopMenuItems = document.querySelectorAll(
+        "#desktop-menu button"
+      );
+      const mobileMenuItems = document.querySelectorAll("#mobile-menu button");
+      const patientSubSections = document.querySelectorAll(
+        ".patient-subsection"
+      );
+      const patientMenuButtons = document.querySelectorAll(
+        '#patients button[onclick^="showPatientSubSection"]'
+      );
+
+      // Function to show a specific section and hide others
+      function showSection(sectionId) {
+        // Hide all main sections
+        sections.forEach((section) => {
+          section.classList.add("hidden");
+        });
+
+        // Show the target section
+        const targetSection = document.getElementById(sectionId);
+        if (targetSection) {
+          targetSection.classList.remove("hidden");
+        }
+
+        // Update active state for desktop menu
+        desktopMenuItems.forEach((item) => {
+          item.classList.remove("active", "bg-base-200"); // Remove active styles
+          if (item.getAttribute("onclick") === `showSection('${sectionId}')`) {
+            item.classList.add("active", "bg-base-200"); // Add active styles
+          }
+        });
+
+        // Update active state for mobile menu
+        mobileMenuItems.forEach((item) => {
+          item.classList.remove("active"); // Remove active class (color is handled)
+          if (item.getAttribute("onclick") === `showSection('${sectionId}')`) {
+            item.classList.add("active"); // Add active class
+          }
+        });
+
+        // Reset patient sub-section view if navigating away from patients
+        if (sectionId !== "patients") {
+          resetPatientSubSections();
+        } else {
+          // Default to patient list when showing patients section
+          showPatientSubSection("patient-list");
+        }
+        // If chat is selected, scroll to bottom (optional)
+        if (sectionId === "chat") {
+          const chatArea = document.querySelector("#chat .overflow-y-auto");
+          if (chatArea) {
+            chatArea.scrollTop = chatArea.scrollHeight;
+          }
+        }
+      }
+
+      // Function to show a specific patient sub-section
+      function showPatientSubSection(subSectionId) {
+        // Hide all patient sub-sections
+        patientSubSections.forEach((sub) => {
+          sub.classList.add("hidden");
+        });
+
+        // Show the target sub-section
+        const targetSubSection = document.getElementById(subSectionId);
+        if (targetSubSection) {
+          targetSubSection.classList.remove("hidden");
+        }
+
+        // Update active state for patient menu buttons
+        patientMenuButtons.forEach((button) => {
+          button.classList.remove("btn-primary"); // Remove primary style
+          button.classList.add(
+            "btn-outline",
+            "border-gray-300",
+            "text-gray-600"
+          ); // Add outline style
+          if (
+            button.getAttribute("onclick") ===
+            `showPatientSubSection('${subSectionId}')`
+          ) {
+            button.classList.remove(
+              "btn-outline",
+              "border-gray-300",
+              "text-gray-600"
+            );
+            button.classList.add("btn-primary"); // Add primary style to active
+          }
+        });
+      }
+
+      // Function to reset patient sub-sections to default (list view)
+      function resetPatientSubSections() {
+        showPatientSubSection("patient-list");
+      }
+
+      // --- Mock Functions for Integration and Documents ---
+
+      function fetchLabResults(patientId) {
+        // Simulate fetching data
+        console.log(`Fetching lab results for patient ID: ${patientId}`);
+        const resultsArea = document.getElementById("lab-results-area");
+        const patientNameEl = document.getElementById("lab-patient-name");
+        const patientSelect = document.querySelector("#integration select");
+        const selectedOption =
+          patientSelect.options[patientSelect.selectedIndex];
+
+        if (selectedOption && selectedOption.value) {
+          patientNameEl.textContent = selectedOption.text; // Use selected patient name
+          resultsArea.classList.remove("hidden"); // Show results area
+          // In a real app, you'd populate the list with actual fetched data
+        } else {
+          resultsArea.classList.add("hidden"); // Hide if no patient selected
+          alert("Пожалуйста, выберите пациента."); // Use alert for simplicity here
+        }
+      }
+
+      function generateDocument(patientId, templateId) {
+        // Simulate generating document
+        console.log(
+          `Generating document for patient ID: ${patientId}, template ID: ${templateId}`
+        );
+        const docArea = document.getElementById("generated-document-area");
+        const docTitle = document.getElementById("document-title");
+        const docTimestamp = document.getElementById("document-timestamp");
+        const docContent = document.getElementById("document-content");
+        const patientSelect = document.querySelector(
+          "#documents select:first-of-type"
+        ); // Patient select
+        const templateSelect = document.querySelector(
+          "#documents select:last-of-type"
+        ); // Template select
+
+        const selectedPatientOption =
+          patientSelect.options[patientSelect.selectedIndex];
+        const selectedTemplateOption =
+          templateSelect.options[templateSelect.selectedIndex];
+
+        if (
+          selectedPatientOption &&
+          selectedPatientOption.value &&
+          selectedTemplateOption &&
+          selectedTemplateOption.value
+        ) {
+          docTitle.textContent = selectedTemplateOption.text; // Use selected template name
+          docTimestamp.textContent = new Date().toLocaleString("ru-RU");
+
+          // Mock content based on template
+          let contentHtml = `<p>Пациент: ${
+            selectedPatientOption.text
+          }</p><p>Дата: ${new Date().toLocaleDateString("ru-RU")}</p>`;
+          if (templateId == 1) {
+            // Направление на анализ
+            contentHtml +=
+              "<p><strong>Направление на Общий Анализ Крови</strong></p><p>Просим провести исследование.</p>";
+          } else if (templateId == 2) {
+            // Выписка
+            contentHtml +=
+              "<p><strong>Выписка из истории болезни №...</strong></p><p>Диагноз при поступлении: ...</p><p>Проведенное лечение: ...</p><p>Рекомендации: ...</p>";
+          } else if (templateId == 3) {
+            // Рецепт
+            contentHtml +=
+              "<p><strong>Rp.:</strong></p><p>Tab. Paracetamoli 0,5</p><p>D.t.d. N 10</p><p>S. По 1 таблетке при головной боли.</p>";
+          } else {
+            contentHtml += "<p>Содержимое для выбранного шаблона...</p>";
+          }
+          docContent.innerHTML = contentHtml;
+
+          docArea.classList.remove("hidden"); // Show document area
+        } else {
+          docArea.classList.add("hidden"); // Hide if selections missing
+          alert("Пожалуйста, выберите пациента и шаблон."); // Use alert for simplicity
+        }
+      }
+
+      // --- Event Listeners ---
+
+      // Add click listeners to calendar days (example)
+      document.querySelectorAll(".calendar-day").forEach((day) => {
+        day.addEventListener("click", () => {
+          // Remove selected class from all days
+          document
+            .querySelectorAll(".calendar-day.selected")
+            .forEach((selectedDay) => {
+              selectedDay.classList.remove("selected");
+            });
+          // Add selected class to the clicked day
+          day.classList.add("selected");
+          // Here you would typically load data for the selected date
+          console.log(`Date selected: ${day.textContent} August 2025`);
+        });
+      });
+
+      // Initialize the view to show the schedule section first
+      document.addEventListener("DOMContentLoaded", () => {
+        showSection("schedule");
+      });
+    </script>
+  </body>
+</html>
