@@ -3,6 +3,8 @@ from django.db.models import Q
 from .models import Person, Visit
 from django import forms
 from django.shortcuts import render
+from .forms import PatientForm, TransferPatientForm
+from django.contrib.auth.decorators import login_required
 
 def index(request):
     return render(request, 'patients/index.html')
@@ -63,3 +65,43 @@ def visit_update(request, visit_id):
     else:
         form = VisitForm(instance=visit)
     return render(request, 'patients/visit_form.html', {'form': form, 'visit': visit})
+
+
+@login_required
+def add_patient(request):
+    """Представление для создания нового пациента без создания приёма."""
+    if request.method == 'POST':
+        form = PatientForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('patients:patient_list')
+    else:
+        form = PatientForm()
+    return render(request, 'patients/add_patient.html', {'form': form})
+
+@login_required
+def select_transfer_patient(request):
+    """
+    Представление для выбора пациента, которого необходимо передать.
+    Здесь можно вывести список пациентов с кнопкой "Передать" для каждого.
+    """
+    patients = Person.objects.all()
+    return render(request, 'patients/select_transfer_patient.html', {'patients': patients})
+
+@login_required
+def transfer_patient(request, patient_id):
+    """Представление для передачи пациента от одного врача другому."""
+    patient = get_object_or_404(Person, id=patient_id)
+    if request.method == 'POST':
+        form = TransferPatientForm(request.POST)
+        if form.is_valid():
+            new_doctor = form.cleaned_data['new_doctor']
+            # Например, можно добавить новое поле в Person, которое хранит лечащего врача.
+            # Предположим, что в модели Person есть поле doctor:
+            patient.doctor = new_doctor
+            patient.save()
+            return redirect('patients:patient_list')
+    else:
+        form = TransferPatientForm()
+    return render(request, 'patients/transfer_patient.html', {'form': form, 'patient': patient})
+

@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Генерация документа</title>
+</head>
+<body>
+    <h1>Генерация документа</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Сгенерировать документ</button>
+    </form>
+    <p><a href="{% url 'documents:index' %}">Вернуться на главную Documents</a></p>
+</body>
+</html>

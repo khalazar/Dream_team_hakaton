@@ -11,6 +11,9 @@
         <li><a href="{% url 'patients:patient_list' %}">Список пациентов</a></li>
         <li><a href="{% url 'patients:visit_list' %}">Список приёмов</a></li>
         <li><a href="{% url 'patients:visit_create' %}">Создать приём</a></li>
+        <li><a href="{% url 'patients:add_patient' %}">Создать пациента</a></li>
+        <!-- Для передачи пациента нужен id, поэтому можно создать отдельное представление, где сначала выбирается пациент -->
+        <li><a href="{% url 'patients:select_transfer_patient' %}">Передать пациента другому врачу</a></li>
     </ul>
     <p><a href="{% url 'home' %}">Вернуться на главную</a></p>
 </body>

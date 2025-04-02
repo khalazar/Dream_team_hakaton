@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Список медикаментов</title>
+</head>
+<body>
+    <h1>Список медикаментов</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Название</th>
+                <th>Описание</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for medicine in medicines %}
+                <tr>
+                    <td>{{ medicine.name }}</td>
+                    <td>{{ medicine.description }}</td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="2">Нет доступных медикаментов.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

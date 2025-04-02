@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Предварительный просмотр документа</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+        }
+        h1 {
+            text-align: center;
+        }
+        .content {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 10px;
+            width: 60%;
+            margin: auto;
+        }
+        p {
+            font-size: 16px;
+        }
+        .download-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Предварительный просмотр документа</h1>
+    <div class="content">
+        <p><strong>ФИО:</strong> {{ patient.full_name }}</p>
+        <p><strong>Дата рождения:</strong> {{ patient.birth }}</p>
+        <p><strong>Пол:</strong> {% if patient.male %}Мужской{% else %}Женский{% endif %}</p>
+        <p><strong>Телефон:</strong> {{ patient.phone }}</p>
+        <p><strong>Email:</strong> {{ patient.email }}</p>
+        <p><strong>Адрес:</strong> {{ patient.address }}</p>
+        <p><strong>Диагноз:</strong> {{ diagnosis }}</p>
+        <p><strong>Рекомендации:</strong> {{ recommendation }}</p>
+    </div>
+
+    <div class="download-link">
+        <a href="{% url 'documents:download_pdf' %}?patient_id={{ patient.id }}&diagnosis={{ diagnosis }}">📄 Скачать PDF</a>
+    </div>
+
+    <div class="download-link">

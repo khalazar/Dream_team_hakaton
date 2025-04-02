@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: DejaVu Sans, sans-serif;
+        }
+        h1 {
+            text-align: center;
+        }
+        .content {
+            margin: 20px;
+        }
+        p {
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Медицинский документ</h1>
+    <div class="content">
+        <p><strong>ФИО:</strong> {{ patient.full_name }}</p>
+        <p><strong>Дата рождения:</strong> {{ patient.birth }}</p>
+        <p><strong>Пол:</strong> {% if patient.male %}Мужской{% else %}Женский{% endif %}</p>
+        <p><strong>Телефон:</strong> {{ patient.phone }}</p>
+        <p><strong>Email:</strong> {{ patient.email }}</p>
+        <p><strong>Адрес:</strong> {{ patient.address }}</p>
+        <p><strong>Диагноз:</strong> {{ diagnosis }}</p>
+        <p><strong>Рекомендации:</strong> {{ recommendation }}</p>
+    </div>
+</body>
+</html>

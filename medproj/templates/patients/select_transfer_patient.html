@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Выбор пациента для передачи</title>
+</head>
+<body>
+    <h1>Выберите пациента для передачи другому врачу</h1>
+    <ul>
+        {% for patient in patients %}
+            <li>
+                {{ patient.full_name }}
+                (<a href="{% url 'patients:transfer_patient' patient.id %}">Передать</a>)
+            </li>
+        {% empty %}
+            <li>Пациенты не найдены.</li>
+        {% endfor %}
+    </ul>
+    <p><a href="{% url 'patients:index' %}">Вернуться в раздел Patients</a></p>
+</body>
+</html>

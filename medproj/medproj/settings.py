@@ -136,11 +136,20 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/dev/howto/static-files/
 
-STATIC_URL = "static/"
+STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR / 'static'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+LOGIN_REDIRECT_URL = '/'  # Перенаправление на главную страницу после входа
+LOGOUT_REDIRECT_URL = '/'  # Перенаправление на главную после выхода
+
+
+API_ADDR_MEDICINES = "http://87.228.37.14:61509"
+API_ADDR_LABS = "http://87.228.37.14:61510"
+TOKEN = "5e6f7g8h-9i0j-1k2l-3m4n-5o6p7q8r9s0t"
+CACHE_TIMEOUT = 300  # 5 минут
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/dev/ref/settings/#default-auto-field

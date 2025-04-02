@@ -5,5 +5,7 @@ app_name = 'documents'
 
 urlpatterns = [
     path('', views.index, name='index'),
-    path('generate/<int:template_id>/<int:patient_id>/', views.generate_document, name='generate_document'),
+    path('form/', views.generate_document, name='generate_document'),
+    path('download_pdf/', views.download_pdf, name='download_pdf'),
+
 ]

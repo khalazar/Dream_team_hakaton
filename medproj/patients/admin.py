@@ -3,8 +3,8 @@ from .models import Person, MedCard, Diagnosis, Visit
 
 @admin.register(Person)
 class PersonAdmin(admin.ModelAdmin):
-    list_display = ('full_name', 'male', 'birth')
-    search_fields = ('full_name',)
+    list_display = ('full_name', 'male', 'birth_date', 'phone')
+    search_fields = ('full_name', 'email')
 
 @admin.register(MedCard)
 class MedCardAdmin(admin.ModelAdmin):

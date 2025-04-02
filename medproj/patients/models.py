@@ -1,10 +1,14 @@
 from django.db import models
+from django.conf import settings
 
 class Person(models.Model):
     full_name = models.CharField(max_length=255)
-    male = models.BooleanField()  # True - мужской, False - женский (или как-то иначе)
-    birth = models.DateField()
+    male = models.BooleanField()  # Обязательное поле, True - мужской, False - женский
+    birth_date = models.DateField()
     phone = models.CharField(max_length=20, blank=True, null=True)
+    email = models.EmailField(unique=True, blank=True, null=True)
+    address = models.TextField(blank=True, null=True)
+    doctor = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True, related_name='patients')
 
     def __str__(self):
         return self.full_name

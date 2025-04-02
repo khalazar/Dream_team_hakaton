@@ -6,6 +6,17 @@
 </head>
 <body>
     <h1>Медицинская система</h1>
+
+    {% if user.is_authenticated %}
+        <p>Вы вошли как: <strong>{{ user.get_full_name|default:user.username }}</strong></p>
+        <form action="{% url 'accounts:logout' %}" method="post">
+            {% csrf_token %}
+            <button type="submit">Выйти из аккаунта</button>
+        </form>
+    {% else %}
+        <p><a href="{% url 'accounts:login' %}">Войти</a> | <a href="{% url 'accounts:signup' %}">Регистрация</a></p>
+    {% endif %}
+
     <p>Выберите приложение:</p>
     <ul>
         <li><a href="{% url 'accounts:index' %}">Accounts</a></li>

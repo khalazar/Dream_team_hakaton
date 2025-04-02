@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Передача пациента</title>
+</head>
+<body>
+    <h1>Передача пациента: {{ patient.full_name }}</h1>
+    <p>Текущий лечащий врач:
+        {% if patient.doctor %}
+            {{ patient.doctor.username }}
+        {% else %}
+            Не назначен
+        {% endif %}
+    </p>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Передать</button>
+    </form>
+    <p><a href="{% url 'patients:index' %}">Вернуться в раздел Patients</a></p>
+</body>
+</html>
